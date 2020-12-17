@@ -1,5 +1,6 @@
 <?php
 
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,13 +14,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('test', function () {
+
+
+     dd(App\Models\Family::with('subFamily')->whereHas('subFamily', function($query) {
+          $query->where('ItemFamilyId', 'LIKE', '%C%');
+  })->get());
+  
 });
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
+Route::get('/boutique','ItemController@index');
+
+Route::get('/boutique/Family/{Id}','ItemController@itembyCaption')->name('itembyCaption');
+Route::get('/boutique/{subFamily}','ItemController@itembysubFamily')->name('itembysubFamily');
 
 
-Route::get('/boutique','ProductController@index');
+Route::get('/boutique/{Id}','ItemController@show')->name('product.show');
